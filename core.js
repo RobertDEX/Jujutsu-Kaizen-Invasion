@@ -19,7 +19,7 @@ const COLL = 'techniques';
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 // Change this password to whatever you want
-const ADMIN_PASSWORD = 'invasion2025';
+const ADMIN_PASSWORD = 'RSISS';
 let IS_ADMIN = false;
 
 // ── State ─────────────────────────────────────────────────────────────────────
