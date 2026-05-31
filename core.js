@@ -19,7 +19,7 @@ const COLL = 'techniques';
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 // Change this password to whatever you want
-const ADMIN_PASSWORD = 'RSISS';
+const ADMIN_PASSWORD = 'invasion2025';
 let IS_ADMIN = false;
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -38,6 +38,16 @@ const DEFAULT_TECHNIQUES = [
   { name: 'Falling Blossom Emotion',    category: 'Barrier',   description: 'A secret art of the Big Three Sorcerer Families. Rather than expanding a domain, it counterattacks with cursed energy the instant a domain\'s guaranteed-hit attack makes contact.' },
   { name: 'Hollow Wicker Basket',       category: 'Barrier',   description: 'Predecessor to Simple Domain. Erects a spherical wicker basket barrier that neutralizes an expanded domain\'s barrier to nullify its can\'t-miss attack.' },
   { name: 'Simple Domain',              category: 'Barrier',   description: 'Developed during the Heian Era as the "domain for the weak." Expands a small personal domain that neutralizes an enemy\'s can\'t-miss attack by targeting their domain barrier.' },
+  // Extension
+  { name: 'Bird Strike',                category: 'Extension', description: 'Commands a crow to self-destruct by exceeding its cursed energy limit. The crow hurls itself at the target for a devastating, sacrifice-powered blow.' },
+  { name: 'Collapse',                   category: 'Extension', description: 'Expands the effective critical-hit zone of the Ratio Technique to cover a wide area, rather than a single forced weak point.' },
+  { name: 'Cursed Technique Lapse: Blue', category: 'Extension', description: 'Amplifies the Limitless to generate powerful gravitational attraction by bringing the concept of "natural negative numbers" into reality.' },
+  { name: 'Decay',                      category: 'Extension', description: 'Spreads a floral decomposition pattern on anyone exposed to the user\'s corrosive blood. The mark rapidly breaks down the target\'s body.' },
+  { name: 'Granite Blast',              category: 'Extension', description: 'Releases a concentrated beam of cursed energy with incredible destructive power from the user\'s hair, focused to a singular devastating point.' },
+  { name: 'Hollow Technique: Purple',   category: 'Extension', description: 'A secret technique merging the convergence and divergence of infinities to produce imaginary mass. The resulting blast destroys everything it collides with absolutely.' },
+  { name: "Jacob's Ladder",             category: 'Extension', description: 'Conjures a four-winged trumpet and a massive magic array in the sky. A pillar of divine light descends to extinguish any curse it touches, including special-grade cursed objects.' },
+  { name: 'Piercing Blood',             category: 'Extension', description: 'Fires a beam of compressed blood at the speed of sound, launched from a Convergence blood orb. One of the fastest techniques in the series.' },
+  { name: 'Soul Multiplicity',          category: 'Extension', description: 'Merges two or more souls together, causing a rejection reaction. The resulting energy is weaponized in further extension techniques.' },
   // Inherited
   { name: 'Blood Manipulation',         category: 'Inherited', description: 'Controls the user\'s own blood — its speed, pressure, and shape — to form blades, bullets, barriers, and more. Choso wields it at a terrifying level after 150 years of refinement.' },
   { name: 'Cursed Speech',              category: 'Inherited', description: 'Infuses spoken words with cursed energy, compelling targets to obey commands such as "explode," "stop," or "sleep." Stronger commands drain the user more heavily.' },
@@ -46,62 +56,60 @@ const DEFAULT_TECHNIQUES = [
   { name: 'Straw Doll Technique',       category: 'Inherited', description: 'Channels cursed energy through nails and a straw doll to attack targets from range or damage them via effigy. Extensions include Resonance and Hairpin.' },
   { name: 'Ten Shadows Technique',      category: 'Inherited', description: 'Summons up to ten powerful shikigami using shadows as a medium, including Divine Dogs, Nue, and the fearsome Mahoraga. Destroyed shikigami transfer their power to surviving ones.' },
   // Innate
-    { name: 'Antigravity System',         category: 'Innate',    description: 'Counteracts gravitational forces to varying degrees. Kenjaku retains access to this technique even without the original user\'s body.' },
-    { name: 'Auspicious Beasts Summon',   category: 'Innate',    description: 'A séance technique activated by hiding the face. Allows summoning and use of four auspicious beast abilities: Kaichi, Reiki, Kirin, and Ryu.' },
-    { name: 'Black Bird Manipulation',    category: 'Innate',    description: 'Telepathically controls crows and sees whatever they see. Extension: Bird Strike — commands a crow to self-destruct for a devastating hit.' },
-    { name: 'Blazing Courage',            category: 'Innate',    description: 'Coats a katana in scorching cursed flames, even imitating the blade\'s cutting ability to slice and burn simultaneously.' },
-    { name: 'Boogie Woogie',              category: 'Innate',    description: 'By clapping his hands, the user instantly swaps positions of two targets carrying cursed energy. Simple in concept but devastating in tactical application.' },
-    { name: 'Brain Transplant',           category: 'Innate',    description: 'Transplants the user\'s brain into another person\'s body, gaining access to the host\'s memories, innate technique, and cursed energy.' },
-    { name: 'Claw Fingers',              category: 'Innate',    description: 'Turns the fingers of the left hand into razor-sharp claws with an unknown additional effect on impact.' },
-    { name: 'Cloning Technique',         category: 'Innate',    description: 'Creates up to five clones including the original caster. The user can swap their real body with any clone at any time to avoid danger.' },
-    { name: 'Comedian',                  category: 'Innate',    description: 'Manifests whatever the user genuinely thinks is funny into reality. Requires absolute confidence in one\'s comedic ability to remain active.' },
-    { name: 'Construction',              category: 'Innate',    description: 'Creates objects from nothing using immense cursed energy. Mai\'s limit is one extra bullet per day; Yorozu can recreate almost any substance she recognizes.' },
-    { name: 'Contractual Re-Creation',   category: 'Innate',    description: 'Manifests real, physical objects and services written on contracts or receipts. Extremely versatile depending on the documents available to the user.' },
-    { name: 'Copy',                      category: 'Innate',    description: 'Replicates another sorcerer\'s innate technique by having Rika consume part of their body. The copied technique becomes permanently accessible.' },
-    { name: 'Cursed Energy Discharge',   category: 'Innate',    description: 'Converts enormous cursed energy output into directed blasts fireable at will. Extension: Granite Blast — a concentrated devastatingly powerful beam from the user\'s hair.' },
-    { name: 'Cursed Spirit Manipulation',category: 'Innate',    description: 'After defeating a cursed spirit, the user absorbs and stores it. Stored spirits can be deployed in battle or fused together via Maximum Technique: Uzumaki.' },
-    { name: 'Deadly Sentencing',         category: 'Innate',    description: 'Places the user and target in a one-on-one courtroom trial via Domain Expansion. A guilty verdict from Judgeman can strip the opponent\'s cursed technique entirely.' },
-    { name: 'Disaster Flames',           category: 'Innate',    description: 'Manipulation of lava and fire based on volcanic disasters. Extension: Ember Insects — spawns explosive insects from the volcanic hole on the user\'s head.' },
-    { name: 'Disaster Plants',           category: 'Innate',    description: 'Conjures and manipulates cursed plants and wood. Absorbs the life force from actual plants since they naturally resist cursed energy.' },
-    { name: 'Disaster Tides',            category: 'Innate',    description: 'Summons and manipulates massive volumes of water. Can fill entire rooms and inhale it all back to consume targets. Overwhelmingly powerful within its own Domain.' },
-    { name: 'Doll Technique',            category: 'Innate',    description: 'Manipulates a target through a doll. Whatever is done to the doll is reflected on the target — the most common method being hanging them with a rope.' },
-    { name: 'Fist Barrage',              category: 'Innate',    description: 'Produces several giant cursed energy fists accompanying physical strikes, dealing wide area damage.' },
-    { name: 'G Warstaff',                category: 'Innate',    description: 'Conjures a spear-type cursed tool with a drawing pen-tip. Cutting a target with it allows the user to see into their future.' },
-    { name: 'Hair Airplane',             category: 'Innate',    description: 'Shapes hair into an airplane form for high-speed flight. Cursed energy concentrates in the head, making headbutts devastating, but leaves the body vulnerable.' },
-    { name: 'Hair Helicopter',           category: 'Innate',    description: 'Shapes hair into a helicopter rotor for flight, with freely adjustable angle, length, and spin speed.' },
-    { name: 'Heart Catch',               category: 'Innate',    description: 'Creates a virtual floating hand that grabs targets at a distance, then throws or crushes them against obstacles at will.' },
-    { name: 'Ice Formation',             category: 'Innate',    description: 'Produces extreme cold from the body to generate and manipulate large amounts of ice at will. Extensions: Frost Calm and Icefall.' },
-    { name: 'Idle Death Gamble',         category: 'Innate',    description: 'A pachinko-themed technique primarily expressed through Domain Expansion. Hitting the jackpot grants near-infinite Reverse Cursed Technique energy, making the user effectively immortal.' },
-    { name: 'Immortality',               category: 'Innate',    description: 'Grants eternal life but does not stop the aging process. Without periodic evolution, the user will transcend humanity and become a threat to all of existence.' },
-    { name: 'Inverse',                   category: 'Innate',    description: 'While active, strong attacks become weaker and weak attacks become stronger. There is an upper and lower limit to how much damage the technique can affect.' },
-    { name: 'Love Rendezvous',           category: 'Innate',    description: 'Assigns five stars in a Southern Cross pattern to targets. Stars must follow a fixed approach order — violating it causes attraction instead of avoidance.' },
-    { name: 'Miracles',                  category: 'Innate',    description: 'Stores small everyday miracles by erasing them from memory. Released when the user\'s life is in danger, altering their luck to survive fatal blows.' },
-    { name: 'Mythical Beast Amber',      category: 'Innate',    description: 'Transforms the body to manifest any electrical phenomena. Surpasses human physical limits — but can only be used once before the body collapses.' },
-    { name: 'Paralyzing Gaze',           category: 'Innate',    description: 'Immobilizes anyone the user looks at. If the target breaks through it, severe backlash is dealt to the user\'s eyes.' },
-    { name: 'Photography Technique',     category: 'Innate',    description: 'Manipulates a photographed subject captured via phone camera — including changing their location. Highly draining and its full extent was never fully revealed.' },
-    { name: 'Prayer Song',               category: 'Innate',    description: 'Expels curses and augments physical abilities by dancing to a beat etched into the user\'s body. A ritual-based technique tied deeply to the user\'s cultural heritage.' },
-    { name: 'Puppet Manipulation',       category: 'Innate',    description: 'Remotely controls cursed corpse puppets. The Heavenly Restriction of its user extends the range across all of Japan, enabling control of Ultimate Mechamaru.' },
-    { name: 'Ratio Technique',           category: 'Innate',    description: 'Divides a target with ten lines and forces a guaranteed weak point at the 7:3 ratio. Can be applied to any part of the body. Extension: Collapse.' },
-    { name: 'Rot Technique',             category: 'Innate',    description: 'Manipulates the user\'s own highly corrosive blood. The extension technique Decay spreads a floral pattern on anyone exposed to their blood, rapidly decomposing the body.' },
-    { name: 'Scorpion Tail',             category: 'Innate',    description: 'Controls a scorpion tail-shaped mass of hair, stinging targets with its sharp tip.' },
-    { name: 'Séance Technique',          category: 'Innate',    description: 'Summons body or soul information of a deceased person using their corpse. Allows the user or a willing participant to shapeshift into that person.' },
-    { name: 'Self-Detonation',           category: 'Innate',    description: 'Detaches and detonates the user\'s own body parts as explosive bombs, creating large blasts.' },
-    { name: 'Shrine',                    category: 'Innate',    description: 'Two slashing techniques — Dismantle cuts targets from afar instantly; Cleave adjusts its power proportionally to the opponent\'s cursed energy and toughness.' },
-    { name: 'Sky Manipulation',          category: 'Innate',    description: 'Turns empty space and sky into tangible surfaces that can be torn, folded, and weaponized. Extension: Thin Ice Breaker.' },
-    { name: 'Solo Forbidden Area',       category: 'Innate',    description: 'Creates a zone that enhances a willing sorcerer\'s cursed energy capacity and output. Potency is boosted to 120% when elevated into a full ritual.' },
-    { name: 'Sound Amplification',       category: 'Innate',    description: 'Uses the body as a sound amplification device for an electric guitar, launching the melody as powerful waves of cursed energy.' },
-    { name: 'Star Rage',                 category: 'Innate',    description: 'Adds virtual mass to the user\'s body and shikigami, drastically increasing destructive power. Can also set mass to near-zero for instantaneous movement.' },
-    { name: 'Stone Hands',               category: 'Innate',    description: 'Creates gigantic stone hands from the earth to clasp and crush targets between their palms.' },
-    { name: 'Sugar Manipulation',        category: 'Innate',    description: 'Amplifies blood sugar levels and converts excess sugar into physical forms such as pudding. Causes hypoglycemia in the user upon activation.' },
-    { name: 'Technique Extinguishment',  category: 'Innate',    description: 'Nullifies any and all curses — techniques, barriers, cursed objects, cursed spirits, and even incarnations. Extension: Jacob\'s Ladder.' },
-    { name: 'Tool Manipulation',         category: 'Innate',    description: 'Telepathically controls a broom, enabling flight and generation of powerful gusts of cursed energy wind. Extension: Wind Scythe.' },
-    { name: 'Wound Stasis',              category: 'Innate',    description: 'Stops wounds from worsening upon application. Cannot heal, but halts bleeding and dulls pain for injuries received before activation.' },
+  { name: 'Antigravity System',         category: 'Innate',    description: 'Counteracts gravitational forces to varying degrees. Kenjaku retains access to this technique even without the original user\'s body.' },
+  { name: 'Auspicious Beasts Summon',   category: 'Innate',    description: 'A séance technique activated by hiding the face. Allows summoning and use of four auspicious beast abilities: Kaichi, Reiki, Kirin, and Ryu.' },
+  { name: 'Black Bird Manipulation',    category: 'Innate',    description: 'Telepathically controls crows and sees whatever they see. Extension: Bird Strike — commands a crow to self-destruct for a devastating hit.' },
+  { name: 'Blazing Courage',            category: 'Innate',    description: 'Coats a katana in scorching cursed flames, even imitating the blade\'s cutting ability to slice and burn simultaneously.' },
+  { name: 'Boogie Woogie',              category: 'Innate',    description: 'By clapping his hands, the user instantly swaps positions of two targets carrying cursed energy. Simple in concept but devastating in tactical application.' },
+  { name: 'Brain Transplant',           category: 'Innate',    description: 'Transplants the user\'s brain into another person\'s body, gaining access to the host\'s memories, innate technique, and cursed energy.' },
+  { name: 'Cloning Technique',          category: 'Innate',    description: 'Creates up to five clones including the original caster. The user can swap their real body with any clone at any time to avoid danger.' },
+  { name: 'Comedian',                   category: 'Innate',    description: 'Manifests whatever the user genuinely thinks is funny into reality. Requires absolute confidence in one\'s comedic ability to remain active.' },
+  { name: 'Construction',               category: 'Innate',    description: 'Creates objects from nothing using immense cursed energy. Mai\'s limit is one extra bullet per day; Yorozu can recreate almost any substance she recognizes.' },
+  { name: 'Contractual Re-Creation',    category: 'Innate',    description: 'Manifests real, physical objects and services written on contracts or receipts. Extremely versatile depending on the documents available to the user.' },
+  { name: 'Copy',                       category: 'Innate',    description: 'Replicates another sorcerer\'s innate technique by having Rika consume part of their body. The copied technique becomes permanently accessible.' },
+  { name: 'Cursed Energy Discharge',    category: 'Innate',    description: 'Converts enormous cursed energy output into directed blasts fireable at will. Extension: Granite Blast — a concentrated devastatingly powerful beam from the user\'s hair.' },
+  { name: 'Cursed Spirit Manipulation', category: 'Innate',    description: 'After defeating a cursed spirit, the user absorbs and stores it. Stored spirits can be deployed in battle or fused together via Maximum Technique: Uzumaki.' },
+  { name: 'Deadly Sentencing',          category: 'Innate',    description: 'Places the user and target in a one-on-one courtroom trial via Domain Expansion. A guilty verdict from Judgeman can strip the opponent of their cursed technique entirely.' },
+  { name: 'Disaster Flames',            category: 'Innate',    description: 'Manipulation of lava and fire based on volcanic disasters. Extension: Ember Insects — spawns explosive insects from the volcanic hole on the user\'s head.' },
+  { name: 'Disaster Plants',            category: 'Innate',    description: 'Conjures and manipulates cursed plants and wood. Absorbs the life force from actual plants since they naturally resist cursed energy.' },
+  { name: 'Disaster Tides',             category: 'Innate',    description: 'Summons and manipulates massive volumes of water. Can fill entire rooms and inhale it all back to consume targets. Overwhelmingly powerful within its own Domain.' },
+  { name: 'Doll Technique',             category: 'Innate',    description: 'Manipulates a target through a doll. Whatever is done to the doll is reflected on the target — the most common method being hanging them with a rope.' },
+  { name: 'G Warstaff',                 category: 'Innate',    description: 'Conjures a spear-type cursed tool with a drawing pen-tip. Cutting a target with it allows the user to see into their future.' },
+  { name: 'Heart Catch',                category: 'Innate',    description: 'Creates a virtual floating hand that grabs targets at a distance, then throws or crushes them against obstacles at will.' },
+  { name: 'Ice Formation',              category: 'Innate',    description: 'Produces extreme cold from the body to generate and manipulate large amounts of ice at will. Extensions: Frost Calm and Icefall.' },
+  { name: 'Idle Death Gamble',          category: 'Innate',    description: 'A pachinko-themed technique primarily expressed through Domain Expansion. Hitting the jackpot grants near-infinite Reverse Cursed Technique energy, making the user effectively immortal.' },
+  { name: 'Idle Transfiguration',       category: 'Innate',    description: 'Directly warps the shape of souls, reshaping the body accordingly. Touching a regular human is usually fatal, twisting them into drone-like Transfigured Humans.' },
+  { name: 'Immortality',                category: 'Innate',    description: 'Grants eternal life but does not stop the aging process. Without periodic evolution, the user will transcend humanity and become a threat to all of existence.' },
+  { name: 'Inverse',                    category: 'Innate',    description: 'While active, strong attacks become weaker and weak attacks become stronger. There is an upper and lower limit to how much damage the technique can affect.' },
+  { name: 'Love Rendezvous',            category: 'Innate',    description: 'Assigns five stars in a Southern Cross pattern to targets. Stars must follow a fixed approach order — violating it causes attraction instead of avoidance.' },
+  { name: 'Miracles',                   category: 'Innate',    description: 'Stores small everyday miracles by erasing them from memory. Released when the user\'s life is in danger, altering their luck to survive fatal blows.' },
+  { name: 'Mythical Beast Amber',       category: 'Innate',    description: 'Transforms the body to manifest any electrical phenomena. Surpasses human physical limits — but can only be used once before the body collapses.' },
+  { name: 'Photography Technique',      category: 'Innate',    description: 'Manipulates a photographed subject captured via phone camera — including changing their location. Highly draining and its full extent was never fully revealed.' },
+  { name: 'Prayer Song',                category: 'Innate',    description: 'Expels curses and augments physical abilities by dancing to a beat etched into the user\'s body. A ritual-based technique tied deeply to the user\'s cultural heritage.' },
+  { name: 'Puppet Manipulation',        category: 'Innate',    description: 'Remotely controls cursed corpse puppets. The Heavenly Restriction of its user extends the range across all of Japan, enabling control of Ultimate Mechamaru.' },
+  { name: 'Ratio Technique',            category: 'Innate',    description: 'Divides a target with ten lines and forces a guaranteed weak point at the 7:3 ratio. Can be applied to any part of the body. Extension: Collapse.' },
+  { name: 'Rot Technique',              category: 'Innate',    description: 'Manipulates the user\'s own highly corrosive blood. The extension technique Decay spreads a floral pattern on anyone exposed to their blood, rapidly decomposing the body.' },
+  { name: 'Séance Technique',           category: 'Innate',    description: 'Summons body or soul information of a deceased person using their corpse. Allows the user or a willing participant to shapeshift into that person.' },
+  { name: 'Self-Detonation',            category: 'Innate',    description: 'Detaches and detonates the user\'s own body parts as explosive bombs, creating large blasts.' },
+  { name: 'Shrine',                     category: 'Innate',    description: 'Two slashing techniques — Dismantle cuts targets from afar instantly; Cleave adjusts its power proportionally to the opponent\'s cursed energy and toughness.' },
+  { name: 'Sky Manipulation',           category: 'Innate',    description: 'Turns empty space and sky into tangible surfaces that can be torn, folded, and weaponized. Extension: Thin Ice Breaker.' },
+  { name: 'Solo Forbidden Area',        category: 'Innate',    description: 'Creates a zone that enhances a willing sorcerer\'s cursed energy capacity and output. Potency is boosted to 120% when elevated into a full ritual.' },
+  { name: 'Sound Amplification',        category: 'Innate',    description: 'Uses the body as a sound amplification device for an electric guitar, launching the melody as powerful waves of cursed energy.' },
+  { name: 'Star Rage',                  category: 'Innate',    description: 'Adds virtual mass to the user\'s body and shikigami, drastically increasing destructive power. Can also set mass to near-zero for instantaneous movement.' },
+  { name: 'Sugar Manipulation',         category: 'Innate',    description: 'Amplifies blood sugar levels and converts excess sugar into physical forms such as pudding. Causes hypoglycemia in the user upon activation.' },
+  { name: 'Technique Extinguishment',   category: 'Innate',    description: 'Nullifies any and all curses — techniques, barriers, cursed objects, cursed spirits, and even incarnations. Extension: Jacob\'s Ladder.' },
+  { name: 'Tool Manipulation',          category: 'Innate',    description: 'Telepathically controls a broom, enabling flight and generation of powerful gusts of cursed energy wind. Extension: Wind Scythe.' },
+  { name: 'Wound Stasis',               category: 'Innate',    description: 'Stops wounds from worsening upon application. Cannot heal, but halts bleeding and dulls pain for injuries received before activation.' },
 ];
 
 // ── Seed Firestore on first run ───────────────────────────────────────────────
 async function seedIfEmpty() {
-  const snap = await db.collection(COLL).limit(1).get();
-  if (!snap.empty) return;
+  // Use a sentinel document to guarantee seeding only ever runs once,
+  // even if the collection already has data from a previous partial seed.
+  const sentinel = db.collection('_meta').doc('seeded');
+  const sentinelSnap = await sentinel.get();
+  if (sentinelSnap.exists) return;
+
   const batch = db.batch();
   DEFAULT_TECHNIQUES.forEach(t => {
     const ref = db.collection(COLL).doc();
@@ -114,9 +122,11 @@ async function seedIfEmpty() {
       docLink: null,
       reservedBy: null,
       reserveExpiry: null,
+      claimedAt: null,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
   });
+  batch.set(sentinel, { at: firebase.firestore.FieldValue.serverTimestamp() });
   await batch.commit();
 }
 
@@ -361,7 +371,10 @@ function renderMainGrid() {
       cardIndex++;
 
       let footerRight = '';
-      if (t.status === 'claimed')  footerRight = `<span class="card-owner-tag">${t.owner}</span>`;
+      if (t.status === 'claimed')  {
+        const dateStr = t.claimedAt ? new Date(t.claimedAt).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '';
+        footerRight = '<span class="card-owner-tag">' + t.owner + (dateStr ? '<span class="card-claimed-date"> · ' + dateStr + '</span>' : '') + '</span>';
+      }
       if (t.status === 'reserved') footerRight = `<span class="card-timer" data-expiry="${t.reserveExpiry}">⏳ ${formatTimeRemaining(t.reserveExpiry)}</span>`;
 
       const docBadge = t.docLink ? `<span class="card-doc-badge" title="Has OC Document">📄</span>` : '';
@@ -515,7 +528,12 @@ function openDetail(id) {
 
   statusEl.className  = `detail-status status-${t.status}`;
   statusEl.textContent = t.status.toUpperCase();
-  ownerEl.textContent = t.status === 'claimed' ? `— ${t.owner}` : '';
+  if (t.status === 'claimed') {
+    const dateStr = t.claimedAt ? new Date(t.claimedAt).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '';
+    ownerEl.innerHTML = '— ' + t.owner + (dateStr ? '<span class="detail-claimed-date">Claimed ' + dateStr + '</span>' : '');
+  } else {
+    ownerEl.textContent = '';
+  }
 
   if (t.status === 'reserved') {
     reserveInfo.style.display = 'block';
@@ -574,9 +592,9 @@ function openClaimModal(id, mode) {
   const isDur = mode === 'reserve';
 
   document.getElementById('claim-modal-title').textContent   = isDur ? 'Reserve Technique' : 'Claim Technique';
-  document.getElementById('claim-modal-desc').textContent    = `${isDur ? 'Reserving' : 'Claiming'}: "${t.name}"`;
+  document.getElementById('claim-modal-desc').textContent    = isDur ? 'Reserving: "' + t.name + '" — reservation lasts 2 weeks.' : 'Claiming: "' + t.name + '"';
   document.getElementById('claim-label').textContent         = isDur ? 'Your Name' : 'Owner Name';
-  document.getElementById('reserve-duration-group').style.display = isDur ? 'flex' : 'none';
+  document.getElementById('reserve-duration-group').style.display = 'none';
   document.getElementById('claim-doc-group').style.display   = isDur ? 'none' : 'flex';
   document.getElementById('claim-name-input').value = '';
   document.getElementById('claim-doc-input').value  = '';
@@ -591,16 +609,16 @@ document.getElementById('btn-claim-confirm').addEventListener('click', async () 
 
   if (mode === 'claim') {
     const docLink = document.getElementById('claim-doc-input').value.trim() || null;
-    await db.collection(COLL).doc(id).update({ status: 'claimed', owner: name, docLink, reservedBy: null, reserveExpiry: null });
-    showNotification(`"${t.name}" claimed by ${name}!`, 'success');
+    await db.collection(COLL).doc(id).update({ status: 'claimed', owner: name, docLink, reservedBy: null, reserveExpiry: null, claimedAt: Date.now() });
+    showNotification('"' + t.name + '" claimed by ' + name + '!', 'success');
   } else {
-    const mins = parseInt(document.getElementById('reserve-duration').value);
+    const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
     await db.collection(COLL).doc(id).update({
       status: 'reserved', reservedBy: name,
-      reserveExpiry: Date.now() + mins * 60000,
+      reserveExpiry: Date.now() + TWO_WEEKS_MS,
       owner: null, docLink: null,
     });
-    showNotification(`"${t.name}" reserved by ${name} for ${formatDuration(mins)}.`, 'info');
+    showNotification('"' + t.name + '" reserved by ' + name + ' for 2 weeks.', 'info');
   }
   closeModal('modal-claim');
 });
@@ -622,7 +640,7 @@ document.getElementById('btn-accept-confirm').addEventListener('click', async ()
   errEl.style.display = 'none';
   const { id } = STATE.pendingAction;
   const t = STATE.techniques.find(x => x.id === id);
-  await db.collection(COLL).doc(id).update({ status: 'claimed', owner: t.reservedBy, docLink, reservedBy: null, reserveExpiry: null });
+  await db.collection(COLL).doc(id).update({ status: 'claimed', owner: t.reservedBy, docLink, reservedBy: null, reserveExpiry: null, claimedAt: Date.now() });
   showNotification(`"${t.name}" is now claimed by ${t.reservedBy}!`, 'success');
   closeModal('modal-accept');
 });
@@ -638,7 +656,7 @@ function openReleaseModal(id) {
 document.getElementById('btn-release-confirm').addEventListener('click', async () => {
   const { id } = STATE.pendingAction;
   const t = STATE.techniques.find(x => x.id === id);
-  await db.collection(COLL).doc(id).update({ status: 'unclaimed', owner: null, docLink: null, reservedBy: null, reserveExpiry: null });
+  await db.collection(COLL).doc(id).update({ status: 'unclaimed', owner: null, docLink: null, reservedBy: null, reserveExpiry: null, claimedAt: null });
   showNotification(`"${t.name}" released.`, 'info');
   closeModal('modal-release');
 });

@@ -1382,3 +1382,21 @@ body {
   color: var(--red-bright);
   margin-top: 0.2rem;
 }
+
+/* ── Claimed date on card ─────────────────────────────────────────────────── */
+.card-claimed-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Claimed date in detail modal ────────────────────────────────────────── */
+.detail-claimed-date {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  font-style: normal;
+}
