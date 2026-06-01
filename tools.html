@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JJK — Cursed Tools Registry</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Zen+Antique&display=swap" rel="stylesheet">
+  <style>
+    /* Tools-specific overrides */
+    .logo-kanji-tools { color: var(--r5) !important; filter: drop-shadow(0 0 10px var(--r3)) drop-shadow(0 0 25px var(--r1)) !important; }
+    .logo-title-tools { color: var(--r5) !important; text-shadow: 0 0 12px rgba(224,40,40,0.4) !important; }
+    .sidebar::after   { background: linear-gradient(180deg, transparent, var(--r2) 25%, var(--r4) 50%, var(--r2) 75%, transparent) !important; }
+    .sidebar-divider  { background: linear-gradient(90deg, transparent, rgba(120,18,18,0.5) 30%, rgba(80,10,10,0.3) 70%, transparent) !important; }
+    .sidebar-search:focus-within { border-color: rgba(160,22,22,0.6) !important; box-shadow: 0 0 0 2px rgba(200,30,30,0.07) !important; }
+    .nav-btn.active   { color: var(--r6) !important; border-color: rgba(150,22,22,0.5) !important; background: linear-gradient(90deg, rgba(70,8,8,0.4), rgba(35,4,4,0.2)) !important; box-shadow: inset 0 0 20px rgba(220,40,40,0.05), var(--glow-r) !important; }
+    .nav-btn.active::before { background: linear-gradient(180deg,transparent,var(--r5),transparent) !important; box-shadow: 0 0 8px var(--r5) !important; }
+    .nav-btn.active[data-view="claimed"]  { color: var(--g6) !important; border-color: rgba(30,120,40,0.5) !important; background: linear-gradient(90deg, rgba(15,60,20,0.4), rgba(8,30,10,0.2)) !important; box-shadow: inset 0 0 20px rgba(46,204,62,0.05), var(--glow-g) !important; }
+    .nav-btn.active[data-view="claimed"]::before { background: linear-gradient(180deg,transparent,var(--g5),transparent) !important; box-shadow: 0 0 8px var(--g5) !important; }
+    .nav-btn.active[data-view="reserved"] { color: var(--gold-bright) !important; }
+    .sidebar-action-btn { color: var(--r5) !important; border-color: rgba(150,22,22,0.4) !important; background: linear-gradient(135deg, rgba(70,8,8,0.5), rgba(35,4,4,0.3)) !important; }
+    .sidebar-action-btn:hover { border-color: var(--r5) !important; box-shadow: var(--glow-r) !important; color: var(--r6) !important; }
+    .main-title { color: var(--r6) !important; text-shadow: 0 0 18px rgba(220,40,40,0.45), 2px 2px 0 rgba(0,0,0,0.8) !important; }
+    .main-header::after { background: linear-gradient(90deg, transparent, rgba(200,40,40,0.3) 30%, rgba(220,40,40,0.5) 50%, rgba(200,40,40,0.3) 70%, transparent) !important; }
+    .stat-num { color: var(--r5) !important; text-shadow: 0 0 12px rgba(220,40,40,0.35) !important; }
+    .grid-section-title { color: rgba(220,40,40,0.5) !important; }
+    .grid-section-line  { background: linear-gradient(90deg, rgba(160,20,20,0.4), rgba(80,10,10,0.1), transparent) !important; }
+    .sidebar-category-header { color: rgba(220,40,40,0.4) !important; border-color: rgba(100,14,14,0.2) !important; }
+    .empty-kanji { color: rgba(80,10,10,0.2) !important; }
+    .footer-seal { color: rgba(100,15,15,0.35) !important; }
+    .main-content::before { background-image: linear-gradient(rgba(80,10,10,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(80,10,10,0.035) 1px, transparent 1px) !important; }
+    /* back button */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.14em;
+      color: var(--tx3); text-decoration: none;
+      padding: 0.4rem 0.7rem;
+      border: 1px solid rgba(60,20,20,0.3); border-radius: 4px;
+      transition: all 0.2s ease; margin-bottom: 0.3rem; width: fit-content;
+    }
+    .back-btn:hover { border-color: rgba(120,20,20,0.5); color: var(--r6); }
+
+    /* Tool card image */
+    .tool-card-image {
+      width: 100%; height: 160px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(80,10,10,0.3);
+      display: block;
+    }
+    .tool-card-no-image {
+      width: 100%; height: 120px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(15,4,4,0.6);
+      border: 1px dashed rgba(80,10,10,0.25);
+      border-radius: 5px;
+      margin-bottom: 0.8rem;
+      font-family: 'Zen Antique', serif;
+      font-size: 2.5rem;
+      color: rgba(80,10,10,0.3);
+    }
+
+    /* Grade badge */
+    .grade-badge {
+      display: inline-flex; align-items: center;
+      font-family: 'Cinzel', serif; font-size: 0.46rem; letter-spacing: 0.12em;
+      padding: 0.2rem 0.5rem; border-radius: 3px; border: 1px solid;
+      margin-bottom: 0.5rem;
+    }
+    .grade-1    { color: #ffdd88; border-color: rgba(180,140,20,0.4); background: rgba(100,70,5,0.2); }
+    .grade-2    { color: #e0c0c0; border-color: rgba(140,80,80,0.4); background: rgba(80,30,30,0.2); }
+    .grade-3    { color: var(--tx2); border-color: rgba(60,100,70,0.4); background: rgba(30,60,35,0.2); }
+    .grade-spec { color: #ff8888; border-color: rgba(200,30,30,0.5); background: rgba(100,10,10,0.25); }
+
+    /* Detail image */
+    .detail-tool-image {
+      width: 100%; max-height: 220px;
+      object-fit: cover; border-radius: 6px;
+      margin-bottom: 1.1rem;
+      border: 1px solid rgba(80,10,10,0.35);
+    }
+
+    /* Image upload area */
+    .image-upload-area {
+      border: 2px dashed rgba(80,10,10,0.35);
+      border-radius: 6px;
+      padding: 1.2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .image-upload-area:hover { border-color: rgba(180,22,22,0.5); background: rgba(50,5,5,0.1); }
+    .image-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 1.8rem; margin-bottom: 0.4rem; opacity: 0.5; }
+    .upload-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--tx3); }
+    .upload-sub   { font-size: 0.75rem; color: var(--tx4); margin-top: 0.2rem; font-style: italic; }
+    .upload-preview { width: 100%; max-height: 140px; object-fit: cover; border-radius: 4px; margin-top: 0.6rem; display: none; }
+    .upload-progress { margin-top: 0.6rem; height: 2px; background: rgba(80,10,10,0.2); border-radius: 1px; overflow: hidden; display: none; }
+    .upload-progress-fill { height: 100%; background: var(--r5); width: 0%; transition: width 0.3s ease; }
+
+    .nav-btn.active[data-view="unclaimed"] { color: var(--r6) !important; }
+  </style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="ripple-overlay"></div>
+
+<div id="loading-screen">
+  <div class="loading-inner">
+    <div class="loading-kanji" style="color:var(--r5);filter:drop-shadow(0 0 20px var(--r3)) drop-shadow(0 0 60px var(--r1))">器</div>
+    <div class="loading-text">CATALOGUING CURSED TOOLS</div>
+    <div class="loading-bar"><div class="loading-bar-fill" style="background:linear-gradient(90deg,var(--r2),var(--r5),var(--r6));box-shadow:0 0 8px var(--r5)"></div></div>
+  </div>
+</div>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+<button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu" style="border-color:rgba(150,22,22,0.4);color:var(--r5)">☰</button>
+
+<div class="app-shell" id="app-shell" style="display:none">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="home.html" class="back-btn">← Back to Registry</a>
+      <div class="sidebar-logo">
+        <span class="logo-kanji logo-kanji-tools">器</span>
+        <div class="logo-text">
+          <span class="logo-title logo-title-tools">CURSED</span>
+          <span class="logo-sub">TOOL REGISTRY</span>
+        </div>
+      </div>
+      <div class="admin-badge" id="admin-badge" style="display:none">
+        <span class="admin-badge-icon">⚔</span>
+        <span class="admin-badge-text">ADMIN</span>
+        <button class="admin-logout-btn" id="btn-admin-logout">✕</button>
+      </div>
+      <div class="sidebar-divider"></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" id="btn-unclaimed" data-view="unclaimed">
+        <span class="nav-icon">◈</span><span class="nav-label">Unclaimed</span>
+        <span class="nav-count" id="count-unclaimed">0</span>
+      </button>
+      <button class="nav-btn" id="btn-claimed" data-view="claimed">
+        <span class="nav-icon">◆</span><span class="nav-label">Claimed</span>
+        <span class="nav-count" id="count-claimed">0</span>
+      </button>
+      <button class="nav-btn" id="btn-reserved" data-view="reserved">
+        <span class="nav-icon">◇</span><span class="nav-label">Reserved</span>
+        <span class="nav-count" id="count-reserved">0</span>
+      </button>
+      <button class="nav-btn nav-btn-admin" id="btn-admin-tab" data-view="admin" style="display:none">
+        <span class="nav-icon">⚔</span><span class="nav-label">Admin Panel</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-actions" id="sidebar-actions" style="display:none">
+      <button class="sidebar-action-btn" id="open-add-modal">＋ Add Tool</button>
+      <button class="sidebar-action-btn sidebar-action-btn-secondary" id="btn-bulk-mode">☰ Bulk Delete</button>
+    </div>
+    <div class="sidebar-actions" id="sidebar-login-area">
+      <button class="sidebar-login-btn" id="btn-open-admin-login">⚔ Admin Login</button>
+    </div>
+
+    <div class="sidebar-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="sidebar-search-input" placeholder="Search tools..."/>
+    </div>
+
+    <div class="sidebar-list" id="sidebar-list"></div>
+
+    <div class="sidebar-footer">
+      <span class="footer-seal">⬡</span>
+      <span>Cursed Tool Registry</span>
+    </div>
+  </aside>
+
+  <main class="main-content" id="main-content">
+    <header class="main-header">
+      <div class="header-titles">
+        <h1 class="main-title" id="main-title">Unclaimed Tools</h1>
+        <p class="main-subtitle" id="main-subtitle">Tools awaiting a wielder</p>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num" id="stat-num">0</span>
+        <span class="stat-label">tools</span>
+      </div>
+    </header>
+    <div class="technique-grid" id="technique-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="empty-kanji">無</div>
+      <p>Nothing here</p>
+    </div>
+  </main>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Admin Login -->
+<div class="modal-overlay" id="modal-admin-login">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-admin-login">✕</button>
+    <h2 class="modal-title">Admin Login</h2>
+    <div class="modal-form">
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="admin-password-input" placeholder="Password..."/>
+      </div>
+      <p class="admin-login-error" id="admin-login-error" style="display:none">Incorrect password.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" data-close="modal-admin-login">Cancel</button>
+        <button class="btn-confirm" id="btn-admin-login-confirm">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Tool -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-add">✕</button>
+    <h2 class="modal-title">Register Cursed Tool</h2>
+    <div class="modal-form">
+      <div class="form-group">
+        <label>Tool Name</label>
+        <input type="text" id="add-name" placeholder="e.g. Playful Cloud"/>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="add-desc" placeholder="Describe this cursed tool..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Grade</label>
+        <select id="add-grade">
+          <option value="Special Grade">Special Grade</option>
+          <option value="Grade 1">Grade 1</option>
+          <option value="Grade 2">Grade 2</option>
+          <option value="Grade 3">Grade 3</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tool Image</label>
+        <div class="image-upload-area" id="add-upload-area">
+          <input type="file" id="add-image-file" accept="image/*"/>
+          <div class="upload-icon">🗡</div>
+          <div class="upload-label">CLICK TO UPLOAD IMAGE</div>
+          <div class="upload-sub">PNG, JPG, WEBP — max 5MB</div>
+          <img class="upload-preview" id="add-image-preview" alt=""/>
+          <div class="upload-progress" id="add-upload-progress">
+            <div class="upload-progress-fill" id="add-upload-fill"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Initial Owner <span class="optional">(optional)</span></label>
+        <input type="text" id="add-owner" placeholder="Owner name"/>
+      </div>
+      <div class="form-group">
+        <label>OC Document Link <span class="optional">(optional)</span></label>
+        <input type="url" id="add-doc-link" placeholder="https://docs.google.com/..."/>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" data-close="modal-add">Cancel</button>
+        <button class="btn-confirm" id="btn-add-confirm" style="border-color:rgba(150,22,22,0.5);color:var(--r6);background:linear-gradient(135deg,rgba(70,8,8,0.8),rgba(35,4,4,0.6))">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal-box modal-detail-box">
+    <button class="modal-close" data-close="modal-detail">✕</button>
+    <img class="detail-tool-image" id="detail-image" src="" alt="" style="display:none"/>
+    <div class="detail-header">
+      <div class="detail-category-badge" id="detail-badge"></div>
+      <h2 class="detail-title" id="detail-title"></h2>
+      <div class="detail-status-row">
+        <span class="detail-status" id="detail-status"></span>
+        <span class="detail-owner" id="detail-owner"></span>
+      </div>
+    </div>
+    <p class="detail-desc" id="detail-desc"></p>
+    <div class="detail-doc-link" id="detail-doc-link" style="display:none">
+      <a id="detail-doc-anchor" href="#" target="_blank" rel="noopener">
+        <span class="doc-icon">📄</span><span>View OC Document</span><span class="doc-arrow">↗</span>
+      </a>
+    </div>
+    <div class="detail-reserve-info" id="detail-reserve-info" style="display:none">
+      <div class="reserve-timer-label">Reserve expires in</div>
+      <div class="reserve-timer" id="detail-reserve-timer">—</div>
+      <div class="reserve-by">Reserved by: <strong id="detail-reserve-by"></strong></div>
+    </div>
+    <div class="detail-actions" id="detail-actions"></div>
+  </div>
+</div>
+
+<!-- Claim / Reserve -->
+<div class="modal-overlay" id="modal-claim">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-claim">✕</button>
+    <h2 class="modal-title" id="claim-modal-title">Claim Tool</h2>
+    <p class="modal-desc" id="claim-modal-desc"></p>
+    <div class="modal-form">
+      <div class="form-group">
+        <label id="claim-label">Owner Name</label>
+        <input type="text" id="claim-name-input" placeholder="Enter name..."/>
+      </div>
+      <div class="form-group" id="claim-doc-group">
+        <label>OC Document Link <span class="optional">(optional)</span></label>
+        <input type="url" id="claim-doc-input" placeholder="https://..."/>
+      </div>
+      <div class="form-group" id="reserve-duration-group" style="display:none"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" data-close="modal-claim">Cancel</button>
+        <button class="btn-confirm" id="btn-claim-confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Accept -->
+<div class="modal-overlay" id="modal-accept">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-accept">✕</button>
+    <h2 class="modal-title">Accept Reservation</h2>
+    <p class="modal-desc" id="accept-desc"></p>
+    <div class="modal-form">
+      <div class="form-group">
+        <label>OC Document Link <span class="required-star">*</span></label>
+        <input type="url" id="accept-doc-input" placeholder="https://..."/>
+        <p class="field-error" id="accept-doc-error" style="display:none">A document link is required.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" data-close="modal-accept">Cancel</button>
+        <button class="btn-confirm green" id="btn-accept-confirm">Accept → Claim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-delete">✕</button>
+    <h2 class="modal-title modal-title-danger">Delete Tool</h2>
+    <p class="modal-desc" id="delete-desc"></p>
+    <p class="modal-warn">⚠ This permanently removes the tool for everyone.</p>
+    <div class="modal-actions" style="margin-top:1.5rem">
+      <button class="btn-cancel" data-close="modal-delete">Cancel</button>
+      <button class="btn-confirm red" id="btn-delete-confirm">Delete Forever</button>
+    </div>
+  </div>
+</div>
+
+<!-- Release -->
+<div class="modal-overlay" id="modal-release">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-release">✕</button>
+    <h2 class="modal-title">Release Tool</h2>
+    <p class="modal-desc" id="release-desc"></p>
+    <div class="modal-actions" style="margin-top:1.5rem">
+      <button class="btn-cancel" data-close="modal-release">Cancel</button>
+      <button class="btn-confirm red" id="btn-release-confirm">Release</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="tools.js"></script>
+<script src="animation.js"></script>
+</body>
+</html>

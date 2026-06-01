@@ -3,275 +3,575 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JJK — Cursed Technique Registry</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>JJK Invasion — Registry</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Zen+Antique&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Zen+Antique&display=swap');
+
+    :root {
+      --void:   #010301;
+      --g1: #082e0d; --g3: #1a7525; --g4: #22a030; --g5: #2ecc3e; --g6: #52e862;
+      --r1: #2d0505; --r3: #8c1212; --r4: #bb1e1e; --r5: #e02828; --r6: #f55050;
+      --tx1: #d8f0dc; --tx2: #8ab890; --tx3: #4a7a50; --tx4: #253a28;
+      --glow-g: 0 0 30px rgba(46,204,62,0.4), 0 0 80px rgba(20,100,28,0.2);
+      --glow-r: 0 0 30px rgba(224,40,40,0.4), 0 0 80px rgba(120,15,15,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      background: var(--void);
+      color: var(--tx1);
+      font-family: 'Crimson Pro', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Canvas bg ── */
+    #bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* ── Grain overlay ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ── Main wrapper ── */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(2rem, 6vh, 4rem);
+      padding: 2rem 1.5rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      text-align: center;
+      animation: fadeDown 1s ease both;
+    }
+
+    .header-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.48rem, 2vw, 0.6rem);
+      letter-spacing: 0.5em;
+      color: var(--tx3);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .header-eyebrow::before,
+    .header-eyebrow::after {
+      content: '';
+      width: clamp(30px, 8vw, 60px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--g3));
+    }
+    .header-eyebrow::after { background: linear-gradient(90deg, var(--g3), transparent); }
+
+    .kanji-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.5rem, 3vw, 1.5rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .kanji-main {
+      font-family: 'Zen Antique', serif;
+      font-size: clamp(3.5rem, 14vw, 7rem);
+      color: var(--g5);
+      filter: drop-shadow(0 0 20px rgba(46,204,62,0.5)) drop-shadow(0 0 60px rgba(20,80,28,0.3));
+      animation: kanjiBreath 4s ease-in-out infinite alternate;
+      line-height: 1;
+      position: relative;
+    }
+
+    .kanji-main.red {
+      color: var(--r5);
+      filter: drop-shadow(0 0 20px rgba(224,40,40,0.5)) drop-shadow(0 0 60px rgba(120,15,15,0.3));
+      animation: kanjiBreathRed 4s ease-in-out infinite alternate;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes kanjiBreath {
+      from { filter: drop-shadow(0 0 12px rgba(46,204,62,0.3)) drop-shadow(0 0 30px rgba(15,60,20,0.2)); }
+      to   { filter: drop-shadow(0 0 28px rgba(46,204,62,0.6)) drop-shadow(0 0 80px rgba(20,90,28,0.35)); }
+    }
+    @keyframes kanjiBreathRed {
+      from { filter: drop-shadow(0 0 12px rgba(224,40,40,0.3)) drop-shadow(0 0 30px rgba(100,10,10,0.2)); }
+      to   { filter: drop-shadow(0 0 28px rgba(224,40,40,0.6)) drop-shadow(0 0 80px rgba(140,15,15,0.35)); }
+    }
+
+    .kanji-divider {
+      font-family: 'Zen Antique', serif;
+      font-size: clamp(1.5rem, 6vw, 3rem);
+      color: rgba(46,204,62,0.15);
+      line-height: 1;
+    }
+
+    .site-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.1rem, 4.5vw, 2.2rem);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--g5) 0%, var(--tx1) 40%, var(--r5) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .site-subtitle {
+      font-family: 'Crimson Pro', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+      color: var(--tx3);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Portal cards ── */
+    .portals {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+      gap: clamp(1rem, 3vw, 1.8rem);
+      width: 100%;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    .portal {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
+    }
+
+    .portal:hover { transform: translateY(-6px) scale(1.01); }
+
+    /* Background layer */
+    .portal-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .portal.green .portal-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(15,80,22,0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(10,50,15,0.4) 0%, transparent 60%),
+        linear-gradient(160deg, rgba(6,22,8,0.97) 0%, rgba(2,10,3,0.99) 100%);
+    }
+    .portal.red .portal-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(80,10,10,0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(50,6,6,0.4) 0%, transparent 60%),
+        linear-gradient(160deg, rgba(18,4,4,0.97) 0%, rgba(8,1,1,0.99) 100%);
+    }
+
+    /* Border */
+    .portal::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      border: 1px solid rgba(20,100,28,0.4);
+      z-index: 3;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .portal.red::before { border-color: rgba(120,18,18,0.4); }
+
+    .portal.green:hover::before { border-color: rgba(46,204,62,0.6); box-shadow: var(--glow-g), inset 0 0 40px rgba(15,80,22,0.1); }
+    .portal.red:hover::before   { border-color: rgba(224,40,40,0.6); box-shadow: var(--glow-r), inset 0 0 40px rgba(80,10,10,0.1); }
+
+    /* Top glow line */
+    .portal-glow-line {
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .portal.green .portal-glow-line { background: linear-gradient(90deg, transparent, var(--g4), var(--g6), var(--g4), transparent); }
+    .portal.red   .portal-glow-line { background: linear-gradient(90deg, transparent, var(--r4), var(--r6), var(--r4), transparent); }
+    .portal:hover .portal-glow-line { opacity: 1; }
+
+    /* Inner content */
+    .portal-inner {
+      position: relative;
+      z-index: 2;
+      padding: clamp(1.8rem, 5vw, 2.8rem) clamp(1.5rem, 4vw, 2.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .portal-icon {
+      font-family: 'Zen Antique', serif;
+      font-size: clamp(2.8rem, 10vw, 4.5rem);
+      line-height: 1;
+      transition: filter 0.3s ease;
+    }
+    .portal.green .portal-icon { color: var(--g5); filter: drop-shadow(0 0 12px rgba(46,204,62,0.35)); }
+    .portal.red   .portal-icon { color: var(--r5); filter: drop-shadow(0 0 12px rgba(224,40,40,0.35)); }
+    .portal.green:hover .portal-icon { filter: drop-shadow(0 0 20px rgba(46,204,62,0.6)) drop-shadow(0 0 50px rgba(20,80,28,0.3)); }
+    .portal.red:hover   .portal-icon { filter: drop-shadow(0 0 20px rgba(224,40,40,0.6)) drop-shadow(0 0 50px rgba(100,10,10,0.3)); }
+
+    .portal-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 0.3rem;
+    }
+    .portal.green .portal-tag { color: rgba(46,204,62,0.5); }
+    .portal.red   .portal-tag { color: rgba(224,40,40,0.5); }
+
+    .portal-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 3.5vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1.25;
+    }
+    .portal.green .portal-title { color: var(--g6); text-shadow: 0 0 15px rgba(46,204,62,0.3); }
+    .portal.red   .portal-title { color: var(--r6); text-shadow: 0 0 15px rgba(224,40,40,0.3); }
+
+    .portal-desc {
+      font-size: clamp(0.82rem, 2.2vw, 0.95rem);
+      color: var(--tx2);
+      font-style: italic;
+      line-height: 1.65;
+    }
+
+    .portal-arrow {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      transition: gap 0.3s ease;
+    }
+    .portal.green .portal-arrow { color: var(--g5); }
+    .portal.red   .portal-arrow { color: var(--r5); }
+    .portal:hover .portal-arrow { gap: 1rem; }
+
+    .portal-arrow-line {
+      flex: 1;
+      height: 1px;
+      max-width: 60px;
+    }
+    .portal.green .portal-arrow-line { background: linear-gradient(90deg, var(--g3), transparent); }
+    .portal.red   .portal-arrow-line { background: linear-gradient(90deg, var(--r3), transparent); }
+
+    /* Floating rune watermark */
+    .portal-rune {
+      position: absolute;
+      bottom: 1rem;
+      right: 1.2rem;
+      font-family: 'Zen Antique', serif;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      line-height: 1;
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .portal.green .portal-rune { color: rgba(15,80,22,0.15); }
+    .portal.red   .portal-rune { color: rgba(80,10,10,0.15); }
+    .portal:hover .portal-rune { opacity: 0.4; }
+
+    /* Stats strip */
+    .portal-stats {
+      display: flex;
+      gap: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid;
+      margin-top: 0.3rem;
+    }
+    .portal.green .portal-stats { border-color: rgba(20,80,28,0.25); }
+    .portal.red   .portal-stats { border-color: rgba(80,12,12,0.25); }
+
+    .stat-item { display: flex; flex-direction: column; gap: 0.1rem; }
+    .stat-val {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      line-height: 1;
+    }
+    .portal.green .stat-val { color: var(--g5); }
+    .portal.red   .stat-val { color: var(--r5); }
+    .stat-lbl { font-family: 'Cinzel', serif; font-size: 0.46rem; letter-spacing: 0.2em; color: var(--tx3); }
+
+    /* ── Footer ── */
+    .site-footer {
+      font-family: 'Cinzel', serif;
+      font-size: 0.48rem;
+      letter-spacing: 0.3em;
+      color: var(--tx4);
+      text-align: center;
+      animation: fadeUp 1s ease 0.6s both;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .site-footer::before, .site-footer::after {
+      content: '⬡';
+      font-size: 0.6rem;
+      color: rgba(20,80,28,0.25);
+    }
+
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+
+    /* Mobile */
+    @media (max-width: 500px) {
+      html, body { overflow-y: auto; }
+      .portals { grid-template-columns: 1fr; }
+      .kanji-divider { display: none; }
+      .kanji-main { font-size: 3rem; }
+    }
+  </style>
 </head>
 <body>
+<canvas id="bg"></canvas>
 
-<canvas id="bg-canvas"></canvas>
-<div id="ripple-overlay"></div>
+<div class="wrapper">
+  <header class="site-header">
+    <div class="header-eyebrow">JJK INVASION SERVER</div>
+    <div class="kanji-row">
+      <span class="kanji-main">呪</span>
+      <span class="kanji-divider">×</span>
+      <span class="kanji-main red">術</span>
+    </div>
+    <h1 class="site-title">CURSED REGISTRY</h1>
+    <p class="site-subtitle">Choose your domain, sorcerer</p>
+  </header>
 
-<!-- Loading -->
-<div id="loading-screen">
-  <div class="loading-inner">
-    <div class="loading-kanji">呪</div>
-    <div class="loading-text">CONNECTING TO THE CURSED REALM</div>
-    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
-  </div>
-</div>
+  <div class="portals">
 
-<!-- Mobile backdrop -->
-<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-
-<!-- Mobile toggle -->
-<button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open menu">☰</button>
-
-<div class="app-shell" id="app-shell" style="display:none">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">
-        <span class="logo-kanji">呪</span>
-        <div class="logo-text">
-          <span class="logo-title">CURSED</span>
-          <span class="logo-sub">TECHNIQUE REGISTRY</span>
+    <!-- Technique Registry -->
+    <a href="index.html" class="portal green">
+      <div class="portal-bg"></div>
+      <div class="portal-glow-line"></div>
+      <div class="portal-rune">呪</div>
+      <div class="portal-inner">
+        <div>
+          <div class="portal-tag">DOMAIN I</div>
+          <div class="portal-icon">術</div>
+        </div>
+        <div>
+          <h2 class="portal-title">Cursed Technique Registry</h2>
+          <p class="portal-desc">Claim, reserve, and manage innate cursed techniques. Every ability of every sorcerer — catalogued in the domain.</p>
+        </div>
+        <div class="portal-stats">
+          <div class="stat-item">
+            <span class="stat-val" id="stat-techs">—</span>
+            <span class="stat-lbl">TECHNIQUES</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val" id="stat-claimed">—</span>
+            <span class="stat-lbl">CLAIMED</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val" id="stat-free">—</span>
+            <span class="stat-lbl">AVAILABLE</span>
+          </div>
+        </div>
+        <div class="portal-arrow">
+          ENTER<span class="portal-arrow-line"></span>→
         </div>
       </div>
+    </a>
 
-      <div class="admin-badge" id="admin-badge" style="display:none">
-        <span class="admin-badge-icon">⚔</span>
-        <span class="admin-badge-text">ADMIN</span>
-        <button class="admin-logout-btn" id="btn-admin-logout" title="Logout">✕</button>
+    <!-- Cursed Tools -->
+    <a href="tools.html" class="portal red">
+      <div class="portal-bg"></div>
+      <div class="portal-glow-line"></div>
+      <div class="portal-rune">器</div>
+      <div class="portal-inner">
+        <div>
+          <div class="portal-tag">DOMAIN II</div>
+          <div class="portal-icon">器</div>
+        </div>
+        <div>
+          <h2 class="portal-title">Cursed Tools Registry</h2>
+          <p class="portal-desc">Weapons imbued with cursed energy. Blades, staves, and relics forged beyond the boundary of the living — catalogued and claimed.</p>
+        </div>
+        <div class="portal-stats">
+          <div class="stat-item">
+            <span class="stat-val" id="stat-tools">—</span>
+            <span class="stat-lbl">TOOLS</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val" id="stat-tools-claimed">—</span>
+            <span class="stat-lbl">CLAIMED</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val" id="stat-tools-free">—</span>
+            <span class="stat-lbl">AVAILABLE</span>
+          </div>
+        </div>
+        <div class="portal-arrow">
+          ENTER<span class="portal-arrow-line"></span>→
+        </div>
       </div>
-      <div class="sidebar-divider"></div>
-    </div>
+    </a>
 
-    <nav class="sidebar-nav">
-      <button class="nav-btn active" id="btn-unclaimed" data-view="unclaimed">
-        <span class="nav-icon">◈</span><span class="nav-label">Unclaimed</span>
-        <span class="nav-count" id="count-unclaimed">0</span>
-      </button>
-      <button class="nav-btn" id="btn-claimed" data-view="claimed">
-        <span class="nav-icon">◆</span><span class="nav-label">Claimed</span>
-        <span class="nav-count" id="count-claimed">0</span>
-      </button>
-      <button class="nav-btn" id="btn-reserved" data-view="reserved">
-        <span class="nav-icon">◇</span><span class="nav-label">Reserved</span>
-        <span class="nav-count" id="count-reserved">0</span>
-      </button>
-      <button class="nav-btn nav-btn-admin" id="btn-admin-tab" data-view="admin" style="display:none">
-        <span class="nav-icon">⚔</span><span class="nav-label">Admin Panel</span>
-      </button>
-    </nav>
-
-    <div class="sidebar-divider"></div>
-
-    <div class="sidebar-actions" id="sidebar-actions" style="display:none">
-      <button class="sidebar-action-btn" id="open-add-modal">＋ Add Technique</button>
-      <button class="sidebar-action-btn sidebar-action-btn-secondary" id="btn-bulk-mode">☰ Bulk Select</button>
-    </div>
-
-    <div class="sidebar-actions" id="sidebar-login-area">
-      <button class="sidebar-login-btn" id="btn-open-admin-login">⚔ Admin Login</button>
-    </div>
-
-    <div class="sidebar-search">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="sidebar-search-input" placeholder="Search techniques..."/>
-    </div>
-
-    <div class="sidebar-list" id="sidebar-list"></div>
-
-    <div class="sidebar-footer">
-      <span class="footer-seal">⬡</span>
-      <span>Jujutsu Kaisen Registry</span>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main-content" id="main-content">
-    <header class="main-header">
-      <div class="header-titles">
-        <h1 class="main-title" id="main-title">Unclaimed Techniques</h1>
-        <p class="main-subtitle" id="main-subtitle">Techniques awaiting a sorcerer</p>
-      </div>
-      <div class="stat-chip">
-        <span class="stat-num" id="stat-num">0</span>
-        <span class="stat-label">techniques</span>
-      </div>
-    </header>
-    <div class="technique-grid" id="technique-grid"></div>
-    <div class="empty-state" id="empty-state" style="display:none">
-      <div class="empty-kanji">空</div>
-      <p>Nothing here</p>
-    </div>
-  </main>
-</div>
-
-<!-- ═══ MODALS ═══ -->
-
-<!-- Admin Login -->
-<div class="modal-overlay" id="modal-admin-login">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-admin-login">✕</button>
-    <h2 class="modal-title">Admin Login</h2>
-    <p class="modal-desc">Enter the admin password to unlock full controls.</p>
-    <div class="modal-form">
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="admin-password-input" placeholder="Password..."/>
-      </div>
-      <p class="admin-login-error" id="admin-login-error" style="display:none">Incorrect password.</p>
-      <div class="modal-actions">
-        <button class="btn-cancel" data-close="modal-admin-login">Cancel</button>
-        <button class="btn-confirm" id="btn-admin-login-confirm">Login</button>
-      </div>
-    </div>
   </div>
-</div>
 
-<!-- Add Technique -->
-<div class="modal-overlay" id="modal-add">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-add">✕</button>
-    <h2 class="modal-title">Register New Technique</h2>
-    <div class="modal-form">
-      <div class="form-group">
-        <label>Technique Name</label>
-        <input type="text" id="add-name" placeholder="e.g. Limitless"/>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="add-desc" placeholder="Describe the cursed technique..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Category</label>
-        <select id="add-category">
-          <option value="Innate">Innate Technique</option>
-          <option value="Inherited">Inherited Technique</option>
-          <option value="Barrier">Barrier Technique</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Initial Owner <span class="optional">(optional)</span></label>
-        <input type="text" id="add-owner" placeholder="Owner name"/>
-      </div>
-      <div class="form-group">
-        <label>OC Document Link <span class="optional">(optional)</span></label>
-        <input type="url" id="add-doc-link" placeholder="https://docs.google.com/..."/>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" data-close="modal-add">Cancel</button>
-        <button class="btn-confirm" id="btn-add-confirm">Register</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Detail -->
-<div class="modal-overlay" id="modal-detail">
-  <div class="modal-box modal-detail-box">
-    <button class="modal-close" data-close="modal-detail">✕</button>
-    <div class="detail-header">
-      <div class="detail-category-badge" id="detail-badge"></div>
-      <h2 class="detail-title" id="detail-title"></h2>
-      <div class="detail-status-row">
-        <span class="detail-status" id="detail-status"></span>
-        <span class="detail-owner" id="detail-owner"></span>
-      </div>
-    </div>
-    <p class="detail-desc" id="detail-desc"></p>
-    <div class="detail-doc-link" id="detail-doc-link" style="display:none">
-      <a id="detail-doc-anchor" href="#" target="_blank" rel="noopener">
-        <span class="doc-icon">📄</span><span>View OC Document</span><span class="doc-arrow">↗</span>
-      </a>
-    </div>
-    <div class="detail-reserve-info" id="detail-reserve-info" style="display:none">
-      <div class="reserve-timer-label">Reserve expires in</div>
-      <div class="reserve-timer" id="detail-reserve-timer">—</div>
-      <div class="reserve-by">Reserved by: <strong id="detail-reserve-by"></strong></div>
-    </div>
-    <div class="detail-actions" id="detail-actions"></div>
-  </div>
-</div>
-
-<!-- Claim / Reserve -->
-<div class="modal-overlay" id="modal-claim">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-claim">✕</button>
-    <h2 class="modal-title" id="claim-modal-title">Claim Technique</h2>
-    <p class="modal-desc" id="claim-modal-desc"></p>
-    <div class="modal-form">
-      <div class="form-group">
-        <label id="claim-label">Owner Name</label>
-        <input type="text" id="claim-name-input" placeholder="Enter name..."/>
-      </div>
-      <div class="form-group" id="claim-doc-group">
-        <label>OC Document Link <span class="optional">(optional)</span></label>
-        <input type="url" id="claim-doc-input" placeholder="https://docs.google.com/..."/>
-      </div>
-      <div class="form-group" id="reserve-duration-group" style="display:none"></div>
-      <div class="modal-actions">
-        <button class="btn-cancel" data-close="modal-claim">Cancel</button>
-        <button class="btn-confirm" id="btn-claim-confirm">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Accept -->
-<div class="modal-overlay" id="modal-accept">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-accept">✕</button>
-    <h2 class="modal-title">Accept Reservation</h2>
-    <p class="modal-desc" id="accept-desc"></p>
-    <div class="modal-form">
-      <div class="form-group">
-        <label>OC Document Link <span class="required-star">*</span></label>
-        <input type="url" id="accept-doc-input" placeholder="https://docs.google.com/..."/>
-        <p class="field-error" id="accept-doc-error" style="display:none">A document link is required.</p>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" data-close="modal-accept">Cancel</button>
-        <button class="btn-confirm green" id="btn-accept-confirm">Accept → Claim</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Delete -->
-<div class="modal-overlay" id="modal-delete">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-delete">✕</button>
-    <h2 class="modal-title modal-title-danger">Delete Technique</h2>
-    <p class="modal-desc" id="delete-desc"></p>
-    <p class="modal-warn">⚠ This permanently removes the technique for everyone.</p>
-    <div class="modal-actions" style="margin-top:1.5rem">
-      <button class="btn-cancel" data-close="modal-delete">Cancel</button>
-      <button class="btn-confirm red" id="btn-delete-confirm">Delete Forever</button>
-    </div>
-  </div>
-</div>
-
-<!-- Release -->
-<div class="modal-overlay" id="modal-release">
-  <div class="modal-box">
-    <button class="modal-close" data-close="modal-release">✕</button>
-    <h2 class="modal-title">Release Technique</h2>
-    <p class="modal-desc" id="release-desc"></p>
-    <div class="modal-actions" style="margin-top:1.5rem">
-      <button class="btn-cancel" data-close="modal-release">Cancel</button>
-      <button class="btn-confirm red" id="btn-release-confirm">Release</button>
-    </div>
-  </div>
+  <footer class="site-footer">JUJUTSU KAISEN INVASION</footer>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="core.js"></script>
-<script src="animation.js"></script>
+<script>
+  // Firebase config
+  firebase.initializeApp({
+    apiKey: "AIzaSyC_Kq7meyPrD-3wxddJ7pVpOpD632Y3sak",
+    authDomain: "jjk-invasion.firebaseapp.com",
+    projectId: "jjk-invasion",
+    storageBucket: "jjk-invasion.firebasestorage.app",
+    messagingSenderId: "155907111446",
+    appId: "1:155907111446:web:33ef57d2c34ad692b65337"
+  });
+  const db = firebase.firestore();
+
+  // Live technique counts
+  db.collection('techniques').onSnapshot(snap => {
+    const all = snap.docs.map(d => d.data());
+    document.getElementById('stat-techs').textContent    = all.length;
+    document.getElementById('stat-claimed').textContent  = all.filter(t=>t.status==='claimed').length;
+    document.getElementById('stat-free').textContent     = all.filter(t=>t.status==='unclaimed').length;
+  });
+
+  // Live tools counts
+  db.collection('tools').onSnapshot(snap => {
+    const all = snap.docs.map(d => d.data());
+    document.getElementById('stat-tools').textContent         = all.length;
+    document.getElementById('stat-tools-claimed').textContent = all.filter(t=>t.status==='claimed').length;
+    document.getElementById('stat-tools-free').textContent    = all.filter(t=>t.status==='unclaimed').length;
+  });
+
+  // ── Background canvas ──────────────────────────────────────────
+  const canvas = document.getElementById('bg');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  // Particles — split left (green) and right (red)
+  class Particle {
+    constructor(side) {
+      this.side = side; // 'green' | 'red'
+      this.reset(true);
+    }
+    reset(init=false) {
+      const half = this.side==='green';
+      this.x    = half ? Math.random()*W*0.55 : W*0.45 + Math.random()*W*0.55;
+      this.y    = init ? Math.random()*H : H+10;
+      this.vy   = -(Math.random()*1.2+0.3);
+      this.vx   = (Math.random()-0.5)*0.35;
+      this.life = 0; this.max = Math.random()*220+80;
+      this.sz   = Math.random()*14+4;
+      this.wob  = Math.random()*Math.PI*2;
+      this.wspd = Math.random()*0.07+0.02;
+    }
+    update() {
+      this.life++; this.wob+=this.wspd;
+      this.x+=this.vx+Math.sin(this.wob)*0.4; this.y+=this.vy; this.vy-=0.004;
+      this.sz*=0.994;
+      if(this.life>=this.max||this.y<-50||this.sz<1) this.reset();
+    }
+    draw() {
+      const p=this.life/this.max;
+      let a = p<0.15?p/0.15:p>0.65?1-(p-0.65)/0.35:1;
+      a*=0.4;
+      const green=this.side==='green';
+      const darkPct = Math.pow(Math.random(),1.4);
+      const r = green ? Math.floor(darkPct*46) : Math.floor(30+darkPct*190);
+      const g = green ? Math.floor(30+darkPct*180) : Math.floor(darkPct*20);
+      const b = 0;
+
+      ctx.save(); ctx.translate(this.x,this.y); ctx.scale(0.6,1);
+      const grad = ctx.createRadialGradient(0,0,0,0,0,this.sz);
+      grad.addColorStop(0,`rgba(${r},${g},${b},${a})`);
+      grad.addColorStop(0.6,`rgba(${Math.max(r-15,0)},${Math.max(g-8,0)},0,${a*0.5})`);
+      grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();
+      ctx.moveTo(0,-this.sz);
+      ctx.bezierCurveTo(this.sz*0.7,-this.sz*0.3,this.sz*0.7,this.sz*0.45,0,this.sz*0.55);
+      ctx.bezierCurveTo(-this.sz*0.7,this.sz*0.45,-this.sz*0.7,-this.sz*0.3,0,-this.sz);
+      ctx.fillStyle=grad; ctx.fill(); ctx.restore();
+    }
+  }
+
+  const particles = [
+    ...Array.from({length:60},()=>new Particle('green')),
+    ...Array.from({length:60},()=>new Particle('red')),
+  ];
+
+  // Central dividing energy line
+  let linePhase = 0;
+
+  function tick() {
+    ctx.clearRect(0,0,W,H);
+
+    // Dark vignette
+    const v=ctx.createRadialGradient(W/2,H/2,H*0.1,W/2,H/2,Math.max(W,H)*0.85);
+    v.addColorStop(0,'rgba(0,0,0,0)');
+    v.addColorStop(1,'rgba(0,0,0,0.7)');
+    ctx.fillStyle=v; ctx.fillRect(0,0,W,H);
+
+    // Green tint left
+    const gl=ctx.createLinearGradient(0,0,W*0.4,0);
+    gl.addColorStop(0,'rgba(5,30,8,0.18)');
+    gl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gl; ctx.fillRect(0,0,W,H);
+
+    // Red tint right
+    const rl=ctx.createLinearGradient(W*0.6,0,W,0);
+    rl.addColorStop(0,'rgba(0,0,0,0)');
+    rl.addColorStop(1,'rgba(30,3,3,0.18)');
+    ctx.fillStyle=rl; ctx.fillRect(0,0,W,H);
+
+    particles.forEach(p=>{p.update();p.draw();});
+
+    // Animated central energy line
+    linePhase += 0.02;
+    const cx = W/2;
+    ctx.save();
+    ctx.globalAlpha = 0.15 + Math.sin(linePhase)*0.08;
+    const lg = ctx.createLinearGradient(cx,0,cx,H);
+    lg.addColorStop(0,'rgba(0,0,0,0)');
+    lg.addColorStop(0.3,'rgba(46,204,62,0.6)');
+    lg.addColorStop(0.5,'rgba(255,255,255,0.3)');
+    lg.addColorStop(0.7,'rgba(224,40,40,0.6)');
+    lg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.strokeStyle=lg; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,H); ctx.stroke();
+    ctx.restore();
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+</script>
 </body>
 </html>

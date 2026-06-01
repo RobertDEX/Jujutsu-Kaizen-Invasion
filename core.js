@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig);
 const db   = firebase.firestore();
 const COLL = 'techniques';
 
-const ADMIN_PASSWORD = 'RSISS';
+const ADMIN_PASSWORD = 'invasion2025';
 let IS_ADMIN = false;
 
 const STATE = {
@@ -291,7 +291,6 @@ function renderGrid() {
       <span class="bulk-count" id="bulk-count">${STATE.bulkSelected.size} selected</span>
       <div class="bulk-actions">
         <button class="bulk-btn bulk-btn-red" id="bulk-delete-btn">🗑 Delete Selected</button>
-        <button class="bulk-btn bulk-btn-gold" id="bulk-release-btn">↩ Release Selected</button>
       </div>
     `;
     grid.appendChild(bar);
@@ -301,7 +300,6 @@ function renderGrid() {
       renderGrid();
     });
     document.getElementById('bulk-delete-btn').addEventListener('click', bulkDelete);
-    document.getElementById('bulk-release-btn').addEventListener('click', bulkRelease);
   }
 
   let idx=0;
@@ -384,14 +382,12 @@ function renderAdminPanel() {
     <span class="admin-toolbar-label">BULK OPERATIONS</span>
     <div class="admin-toolbar-actions">
       <button class="bulk-btn bulk-btn-red" id="admin-bulk-delete">🗑 Delete Selected (${STATE.bulkSelected.size})</button>
-      <button class="bulk-btn bulk-btn-gold" id="admin-bulk-release">↩ Release Selected</button>
       <button class="bulk-btn bulk-btn-clear" id="admin-bulk-clear">✕ Clear Selection</button>
     </div>
   `;
   grid.appendChild(toolbar);
 
   document.getElementById('admin-bulk-delete').addEventListener('click', bulkDelete);
-  document.getElementById('admin-bulk-release').addEventListener('click', bulkRelease);
   document.getElementById('admin-bulk-clear').addEventListener('click',()=>{ STATE.bulkSelected.clear(); renderAll(); });
 
   const all = [...STATE.techniques].sort((a,b)=>a.name.localeCompare(b.name));
@@ -459,14 +455,6 @@ async function bulkDelete() {
   STATE.bulkSelected.clear();
 }
 
-async function bulkRelease() {
-  if (!STATE.bulkSelected.size) { showNotification('No techniques selected.','error'); return; }
-  const batch = db.batch();
-  STATE.bulkSelected.forEach(id => batch.update(db.collection(COLL).doc(id),{status:'unclaimed',owner:null,docLink:null,reservedBy:null,reserveExpiry:null,claimedAt:null}));
-  await batch.commit();
-  showNotification(STATE.bulkSelected.size + ' technique(s) released.','info');
-  STATE.bulkSelected.clear();
-}
 
 /* ── Timer tick ────────────────────────────────────────────────── */
 setInterval(()=>{
