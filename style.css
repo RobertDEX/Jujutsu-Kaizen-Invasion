@@ -1237,3 +1237,26 @@ body {
   box-shadow: 0 0 0 1px rgba(30,120,40,0.3), var(--glow-g) !important;
   background: linear-gradient(145deg, rgba(8,25,10,0.97), rgba(5,15,6,0.99)) !important;
 }
+
+/* ── Back to Registry button ─────────────────────────────────── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  color: var(--tx3);
+  text-decoration: none;
+  padding: 0.38rem 0.7rem;
+  border: 1px solid rgba(20,80,28,0.25);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-bottom: 0.6rem;
+  width: fit-content;
+}
+.back-btn:hover {
+  border-color: rgba(30,120,40,0.5);
+  color: var(--g5);
+  box-shadow: var(--glow-g);
+}
