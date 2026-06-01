@@ -16,7 +16,7 @@ const db      = firebase.firestore();
 const storage = firebase.storage();
 const COLL    = 'tools';
 
-const ADMIN_PASSWORD = 'invasion2025';
+const ADMIN_PASSWORD = 'RSISS';
 let IS_ADMIN = false;
 
 const STATE = {

@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig);
 const db   = firebase.firestore();
 const COLL = 'techniques';
 
-const ADMIN_PASSWORD = 'invasion2025';
+const ADMIN_PASSWORD = 'RSISS';
 let IS_ADMIN = false;
 
 const STATE = {
